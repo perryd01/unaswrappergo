@@ -1,7 +1,11 @@
 package unaswrappergo
 
+import (
+	"encoding/xml"
+)
+
 type GetNewsletterRequest struct {
-	Params NewsletterParams `json:"Params"`
+	Params NewsletterParams `xml:"Params"`
 }
 
 // igénylő típusa, lehetséges értékek:
@@ -23,32 +27,63 @@ const (
 )
 
 type GetNewsletterResponse struct {
-	Subscribers newsletterSubscriberList `json:"Subscribers"`
+	Subscribers newsletterSubscriberList `xml:"Subscribers"`
 }
 
 type newsletterSubscriberList struct {
-	Subscriber []Subscriber `json:"Subscriber"`
+	Subscriber []newsletterSubscriber `xml:"Subscriber"`
 }
 
 type newsletterSubscriber struct {
-	Email      *string `json:"Email,omitempty"`
-	Type       *string `json:"Type,omitempty"`
-	Time       *string `json:"Time,omitempty"`
-	Name       *string `json:"Name,omitempty"`
-	Address    *string `json:"Address,omitempty"`
-	Lang       *string `json:"Lang,omitempty"`
-	Authorized *string `json:"Authorized,omitempty"`
+	Email      *string `xml:"Email,omitempty"`
+	Type       *string `xml:"Type,omitempty"`
+	Time       *string `xml:"Time,omitempty"`
+	Name       *string `xml:"Name,omitempty"`
+	Address    *string `xml:"Address,omitempty"`
+	Lang       *string `xml:"Lang,omitempty"`
+	Authorized *string `xml:"Authorized,omitempty"`
 }
 
 type NewsletterParams struct {
-	Type newsletterIdentityType `json:"Type"`
-	Auth string                 `json:"Auth"`
-	// Unix timestmap, optional
-	TimeStart *string `json:"TimeStart"`
-	// Unix timestamp, optional
-	TimeEnd *string `json:"TimeEnd"`
+	Type      newsletterIdentityType `xml:"Type"`
+	Auth      string                 `xml:"Auth"`
+	TimeStart *string                `xml:"TimeStart"`
+	TimeEnd   *string                `xml:"TimeEnd"`
 }
 
-func (uo *UnasObject) getNewsletter(*np NewsletterParams)(*newsletterSubscriberList, error){
+func (uo *UnasObject) getNewsletter(np *NewsletterParams) (*newsletterSubscriberList, error) {
+	getnwr := GetNewsletterRequest{Params: *np}
+	b, err := xml.Marshal(getnwr)
+	if err != nil {
+		return nil, err
+	}
+	body, err := uo.makeRequest(endpointEnumType(GetNewsletter), b)
+	if err != nil {
+		return nil, err
+	}
 
+	nlsl := newsletterSubscriberList{}
+
+	err = xml.Unmarshal(body, &nlsl)
+	if err != nil {
+		return nil, err
+	}
+
+	return &nlsl, nil
 }
+
+type setNewsletterSubscriberList struct {
+	Subscribers setNewsletterSubscribers `xml:"Subscribers"`
+}
+
+type setNewsletterSubscribers struct {
+	Subscriber []setNewsletterSubscriber `xml:"Subscriber"`
+}
+
+type setNewsletterSubscriber struct {
+	Action string `xml:"Action"`
+	Email  string `xml:"Email"`
+	Name   string `xml:"Name"`
+}
+
+//func (uo *UnasObject) setNewsletter()

@@ -21,10 +21,10 @@ type LoginAPIResponse struct {
 }
 
 type Login struct {
-	Token       string      `xml:"Token"`
-	Expire      string      `xml:"Expire"`
-	Permissions Permissions `xml:"Permissions"`
-	Status      string      `xml:"Status"`
+	Token       string      `xml:"Login>Token"`
+	Expire      string      `xml:"Login>Expire"`
+	Permissions Permissions `xml:"Login>Permissions"`
+	Status      string      `xml:"Login>Status"`
 }
 
 type Permissions struct {
@@ -32,20 +32,20 @@ type Permissions struct {
 }
 
 type AuthPassRequest struct {
-	Auth Auth `json:"Auth"`
+	Auth Auth `xml:"Auth"`
 }
 
 type Auth struct {
-	Username      string `json:"Username"`
-	PasswordCrypt string `json:"PasswordCrypt"`
-	ShopID        string `json:"ShopId"`
-	AuthCode      string `json:"AuthCode"`
+	Username      string `xml:"Username"`
+	PasswordCrypt string `xml:"PasswordCrypt"`
+	ShopID        string `xml:"ShopId"`
+	AuthCode      string `xml:"AuthCode"`
 }
 
 const loginEndpoint = "https://api.unas.eu/shop/login"
 
-func AuthAPI(apikey string) (*LoginAPIResponse, error) {
-	payload := LoginAPIRequest{Params: Params{APIKey: apikey}}
+func AuthwithAPIKey(apikey string) (*Login, error) {
+	payload := LoginAPIRequest{Params: LoginAPIParams{APIKey: apikey}}
 	xmlpayload, err := xml.Marshal(payload)
 	if err != nil {
 		return nil, err
@@ -74,10 +74,10 @@ func AuthAPI(apikey string) (*LoginAPIResponse, error) {
 		return nil, err
 	}
 
-	return &xmlresponse, nil
+	return &xmlresponse.Login, nil
 }
 
-func AuthPass(a Auth) (*LoginAPIResponse, error) {
+func AuthwithPass(a Auth) (*Login, error) {
 	xmlpayload, err := xml.Marshal(AuthPassRequest{Auth: a})
 	if err != nil {
 		return nil, err
@@ -105,6 +105,6 @@ func AuthPass(a Auth) (*LoginAPIResponse, error) {
 		return nil, err
 	}
 
-	return &xmlresponse, nil
+	return &xmlresponse.Login, nil
 
 }

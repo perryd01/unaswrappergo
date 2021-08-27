@@ -24,7 +24,7 @@ type loginAPIResponse struct {
 // Struct which contains data for request authentication
 type login struct {
 	Token       string      `xml:"Login>Token"`
-	Expire      string      `xml:"Login>Expire"`
+	Expire      UnasTimeDate      `xml:"Login>Expire"`
 	Permissions permissions `xml:"Login>Permissions"`
 	Status      string      `xml:"Login>Status"`
 }

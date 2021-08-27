@@ -46,7 +46,6 @@ type Auth struct {
 	AuthCode      string `xml:"AuthCode"`
 }
 
-const loginEndpoint = "https://api.unas.eu/shop/login"
 
 func AuthwithAPIKey(apikey string) (*UnasObject, error) {
 	payload := loginAPIRequest{Params: loginAPIParams{APIKey: apikey}}
@@ -55,7 +54,7 @@ func AuthwithAPIKey(apikey string) (*UnasObject, error) {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", loginEndpoint, bytes.NewBuffer(xmlpayload))
+	req, err := http.NewRequest("POST", string(LoginEndPoint), bytes.NewBuffer(xmlpayload))
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +89,7 @@ func AuthwithPass(a Auth) (*UnasObject, error) {
 	if err != nil {
 		return nil, err
 	}
-	req, err := http.NewRequest("POST", loginEndpoint, bytes.NewBuffer(xmlpayload))
+	req, err := http.NewRequest("POST", string(LoginEndPoint), bytes.NewBuffer(xmlpayload))
 	if err != nil {
 		return nil, err
 	}

@@ -3,16 +3,20 @@ package unaswrappergo
 import "encoding/xml"
 
 type setProductDBRequest struct {
-	Params *SetProductDBParams `json:"Params"`
+	Params *SetProductDBParams `xml:"Params"`
 }
 
+// Request params for SetProductDB request, where an URL can be set for import,
+// more info at: https://unas.hu/tudastar/api/product#setproductdb-keres
 type SetProductDBParams struct {
-	URL     string `json:"Url"`
-	DB      string `json:"DB"`
-	DelType string `json:"DelType"`
-	Lang    string `json:"Lang"`
+	URL     string `xml:"Url"`
+	DB      string `xml:"DB"`
+	DelType string `xml:"DelType"`
+	Lang    string `xml:"Lang"`
 }
 
+// Response from a SetProductDB request that contains logs from the result of the import,
+// more info at: https://unas.hu/tudastar/api/product#setproductdb-valasz
 type SetProductDBResponse struct {
 	ModifiedProducts uint64                     `xml:"setProductDB>Ok>Modify,omitempty"`
 	AddedProducts    uint64                     `xml:"setProductDB>Ok>Add,omitempty"`
@@ -21,14 +25,16 @@ type SetProductDBResponse struct {
 }
 
 type SetProductDBResponseErrors struct {
-	UnknownColumns uint64 `xml:"UnknownColumns,omitempty"`
-	FaultyProducts uint64  `xml:"FaultyProducts,omitempty"`
-	SKU_Duplicity uint64 `xml:"SKU_Duplicity,omitempty"`
+	UnknownColumns    uint64 `xml:"UnknownColumns,omitempty"`
+	FaultyProducts    uint64 `xml:"FaultyProducts,omitempty"`
+	SKU_Duplicity     uint64 `xml:"SKU_Duplicity,omitempty"`
 	NewProductFewData uint64 `xml:"NewProductFewData,omitempty"`
-	LimitError uint64
+	LimitError        uint64
 }
 
-func (uo UnasObject) SetProductDB(params *SetProductDBParams) (*SetProductDBResponse, error){
+// Importing a csv? from an url into the webshop database,
+// more info at: https://unas.hu/tudastar/api/product#setproductdb-funkcio
+func (uo UnasObject) SetProductDB(params *SetProductDBParams) (*SetProductDBResponse, error) {
 	reqBody := setProductDBRequest{Params: params}
 	b, err := xml.Marshal(reqBody)
 	if err != nil {

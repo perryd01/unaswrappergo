@@ -3,10 +3,11 @@ package unaswrappergo
 import (
 	"encoding/xml"
 	"strconv"
+	"strings"
 	"time"
 )
 
-// YYYY.MM.DD Date format
+// UnasDate YYYY.MM.DD Date format
 type UnasDate time.Time
 
 func (date *UnasDate) ToTime() *time.Time {
@@ -26,7 +27,7 @@ func (date *UnasDate) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error
 	return err
 }
 
-// Unix timestamp format
+// UnasTimeStamp Unix timestamp format
 type UnasTimeStamp time.Time
 
 func (timestamp *UnasTimeStamp) ToTime() *time.Time {
@@ -49,11 +50,33 @@ func (timestamp *UnasTimeStamp) UnmarshalXML(d *xml.Decoder, start xml.StartElem
 	return err
 }
 
-type statusBaseType int
+// Base type of the Product
+type statusBaseEnum int
 
-const (
-	StatusBaseNotActive statusBaseType = iota
-	StatusBaseActive
-	StatusBaseActiveNew
-	StatusBaseActiveNotBuyable
-)
+func (statusBase statusBaseEnum) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	return e.EncodeElement(int(statusBase), start)
+}
+
+func (statusBase *statusBaseEnum) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	var i int
+	err := d.DecodeElement(&i, &start)
+	if err == nil {
+		*statusBase = statusBaseEnum(i)
+	}
+	return err
+}
+
+type ContentParamList []string
+
+func (contentParam ContentParamList) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	return e.EncodeElement(strings.Join(contentParam, ","), start)
+}
+
+func (contentParam *ContentParamList) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	var s string
+	err := d.DecodeElement(&s, &start)
+	if err == nil {
+		*contentParam = strings.Split(s, ",")
+	}
+	return err
+}

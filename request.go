@@ -6,14 +6,14 @@ import (
 	"io/ioutil"
 	"net/http"
 )
-
+// Func that handles making requests to specific endpointEnumType endpoints.
 func (uo *UnasObject) makeRequest(endpoint endpointEnumType, body []byte) ([]byte, error) {
 	req, err := http.NewRequest("POST", string(endpoint), bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/xml")
-	req.Header.Set("Authorization", "Bearer "+uo.Login.Login.Token)
+	req.Header.Set("Authorization", "Bearer "+uo.Login.Token)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)

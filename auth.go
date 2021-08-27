@@ -38,7 +38,7 @@ type authPassRequest struct {
 	Auth Auth `xml:"Auth"`
 }
 
-// Struct for login with user:pass
+// Auth Struct for login with user:pass
 type Auth struct {
 	Username      string `xml:"Username"`
 	PasswordCrypt string `xml:"PasswordCrypt"`
@@ -46,7 +46,8 @@ type Auth struct {
 	AuthCode      string `xml:"AuthCode"`
 }
 
-
+// AuthwithAPIKey Authenticating using a API key.
+// https://unas.hu/tudastar/api/authorization#api-kulcs-alapu-azonositas
 func AuthwithAPIKey(apikey string) (*UnasObject, error) {
 	payload := loginAPIRequest{Params: loginAPIParams{APIKey: apikey}}
 	xmlpayload, err := xml.Marshal(payload)
@@ -78,12 +79,14 @@ func AuthwithAPIKey(apikey string) (*UnasObject, error) {
 	}
 
 	uo := UnasObject{
-		Login: xmlresponse,
+		Login: xmlresponse.Login,
 	}
 
 	return &uo, nil
 }
 
+// AuthwithPass Authenticating using a User:Pass combo.
+// https://unas.hu/tudastar/api/authorization#felhasznalonev-alapu-azonositas
 func AuthwithPass(a Auth) (*UnasObject, error) {
 	xmlpayload, err := xml.Marshal(authPassRequest{Auth: a})
 	if err != nil {
@@ -113,7 +116,7 @@ func AuthwithPass(a Auth) (*UnasObject, error) {
 	}
 
 	uo := UnasObject{
-		Login: xmlresponse,
+		Login: xmlresponse.Login,
 	}
 
 	return &uo, nil

@@ -1,5 +1,5 @@
 package unaswrappergo
 
 type UnasObject struct {
-	Login LoginAPIResponse
+	Login login
 }

@@ -5,62 +5,66 @@ import (
 	"encoding/xml"
 	"errors"
 	"io/ioutil"
+	"mime"
 	"net/http"
 )
 
-type LoginAPIRequest struct {
-	Params LoginAPIParams `xml:"Params"`
+type loginAPIRequest struct {
+	Params loginAPIParams `xml:"Params"`
 }
 
-type LoginAPIParams struct {
+type loginAPIParams struct {
 	APIKey string `xml:"ApiKey"`
 }
 
-type LoginAPIResponse struct {
-	Login Login `xml:"Login"`
+type loginAPIResponse struct {
+	Login login `xml:"Login"`
 }
 
-type Login struct {
-	Token       string      `xml:"Token"`
-	Expire      string      `xml:"Expire"`
-	Permissions Permissions `xml:"Permissions"`
-	Status      string      `xml:"Status"`
+// Struct which contains data for request authentication
+type login struct {
+	Token       string      `xml:"Login>Token"`
+	Expire      UnasTimeDate      `xml:"Login>Expire"`
+	Permissions permissions `xml:"Login>Permissions"`
+	Status      string      `xml:"Login>Status"`
 }
 
-type Permissions struct {
+// Permissions for allowed methods towards Unas
+type permissions struct {
 	Permission []string `xml:"Permission"`
 }
 
-type AuthPassRequest struct {
-	Auth Auth `json:"Auth"`
+type authPassRequest struct {
+	Auth Auth `xml:"Auth"`
 }
 
+// Auth Struct for login with user:pass
 type Auth struct {
-	Username      string `json:"Username"`
-	PasswordCrypt string `json:"PasswordCrypt"`
-	ShopID        string `json:"ShopId"`
-	AuthCode      string `json:"AuthCode"`
+	Username      string `xml:"Username"`
+	PasswordCrypt string `xml:"PasswordCrypt"`
+	ShopID        string `xml:"ShopId"`
+	AuthCode      string `xml:"AuthCode"`
 }
 
-const loginEndpoint = "https://api.unas.eu/shop/login"
-
-func AuthAPI(apikey string) (*LoginAPIResponse, error) {
-	payload := LoginAPIRequest{Params: Params{APIKey: apikey}}
+// AuthwithAPIKey Authenticating using a API key.
+// https://unas.hu/tudastar/api/authorization#api-kulcs-alapu-azonositas
+func AuthwithAPIKey(apikey string) (*UnasObject, error) {
+	payload := loginAPIRequest{Params: loginAPIParams{APIKey: apikey}}
 	xmlpayload, err := xml.Marshal(payload)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", loginEndpoint, bytes.NewBuffer(xmlpayload))
+	req, err := http.NewRequest("POST", string(LoginEndPoint), bytes.NewBuffer(xmlpayload))
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Content-Type", "application/xml")
+	req.Header.Set("Content-Type", mime.TypeByExtension(".xml"))
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 
@@ -68,30 +72,36 @@ func AuthAPI(apikey string) (*LoginAPIResponse, error) {
 		return nil, errors.New("unsuccessful post")
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
-	xmlresponse := LoginAPIResponse{}
+	xmlresponse := loginAPIResponse{}
 	err = xml.Unmarshal(body, &xmlresponse)
 	if err != nil {
 		return nil, err
 	}
 
-	return &xmlresponse, nil
+	uo := UnasObject{
+		Login: xmlresponse.Login,
+	}
+
+	return &uo, nil
 }
 
-func AuthPass(a Auth) (*LoginAPIResponse, error) {
-	xmlpayload, err := xml.Marshal(AuthPassRequest{Auth: a})
+// AuthwithPass Authenticating using a User:Pass combo.
+// https://unas.hu/tudastar/api/authorization#felhasznalonev-alapu-azonositas
+func AuthwithPass(a Auth) (*UnasObject, error) {
+	xmlpayload, err := xml.Marshal(authPassRequest{Auth: a})
 	if err != nil {
 		return nil, err
 	}
-	req, err := http.NewRequest("POST", loginEndpoint, bytes.NewBuffer(xmlpayload))
+	req, err := http.NewRequest("POST", string(LoginEndPoint), bytes.NewBuffer(xmlpayload))
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Content-Type", "application/xml")
+	req.Header.Set("Content-Type", mime.TypeByExtension(".xml"))
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 
@@ -99,12 +109,15 @@ func AuthPass(a Auth) (*LoginAPIResponse, error) {
 		return nil, errors.New("unsuccessful post")
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
-	xmlresponse := LoginAPIResponse{}
+	xmlresponse := loginAPIResponse{}
 	err = xml.Unmarshal(body, &xmlresponse)
 	if err != nil {
 		return nil, err
 	}
 
-	return &xmlresponse, nil
+	uo := UnasObject{
+		Login: xmlresponse.Login,
+	}
 
+	return &uo, nil
 }

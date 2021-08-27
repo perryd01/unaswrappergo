@@ -3,11 +3,15 @@ package unaswrappergo
 import (
 	"bytes"
 	"errors"
+	"io"
 	"io/ioutil"
 	"net/http"
 )
 // Func that handles making requests to specific endpointEnumType endpoints.
 func (uo *UnasObject) makeRequest(endpoint endpointEnumType, body []byte) ([]byte, error) {
+	if tokenExpired(*uo.Login.Expire.ToTime()){
+		return nil, errors.New("login token already expired")
+	}
 	req, err := http.NewRequest("POST", string(endpoint), bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
@@ -21,13 +25,18 @@ func (uo *UnasObject) makeRequest(endpoint endpointEnumType, body []byte) ([]byt
 		return nil, err
 	}
 
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+
+		}
+	}(resp.Body)
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, errors.New("status not 200 on " + string(endpoint))
 	}
 
-	returnbody, _ := ioutil.ReadAll(resp.Body)
+	returnable, _ := ioutil.ReadAll(resp.Body)
 
-	return returnbody, nil
+	return returnable, nil
 }

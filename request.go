@@ -7,9 +7,10 @@ import (
 	"io/ioutil"
 	"net/http"
 )
+
 // Func that handles making requests to specific endpointEnumType endpoints.
 func (uo *UnasObject) makeRequest(endpoint endpointEnumType, body []byte) ([]byte, error) {
-	if tokenExpired(*uo.Login.Expire.ToTime()){
+	if tokenExpired(*uo.Login.Expire.ToTime()) {
 		return nil, errors.New("login token already expired")
 	}
 	req, err := http.NewRequest("POST", string(endpoint), bytes.NewBuffer(body))
@@ -28,7 +29,7 @@ func (uo *UnasObject) makeRequest(endpoint endpointEnumType, body []byte) ([]byt
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-
+			return
 		}
 	}(resp.Body)
 

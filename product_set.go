@@ -3,7 +3,7 @@ package unaswrappergo
 import "encoding/xml"
 
 type setProductRequestParams struct {
-	Products []*Product `xml:"Product`
+	Products []*Product `xml:"Product"`
 }
 
 type setProductRequest struct {
@@ -26,7 +26,7 @@ type productStatus struct {
 	Error  string `xml:"Error,omitempty"`
 }
 
-func (uo UnasObject) SetProduct(products []*Product) ([]*productStatus, error) {
+func (uo *UnasObject) SetProduct(products []*Product) ([]*productStatus, error) {
 	body := setProductRequest{P: setProductRequestParams{Products: products}}
 	b, err := xml.Marshal(body)
 	if err != nil {

@@ -29,7 +29,8 @@ func (date *UnasDate) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error
 
 // UnasTimeDate UnasDate YYYY.MM.DD HH:MM:SS TimeDate format
 type UnasTimeDate time.Time
-func (timedate *UnasTimeDate) ToTime() *time.Time{
+
+func (timedate *UnasTimeDate) ToTime() *time.Time {
 	return (*time.Time)(timedate)
 }
 func (timedate UnasTimeDate) MarshalXML(e *xml.Encoder, start xml.StartElement) error {

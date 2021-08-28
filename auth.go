@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/xml"
 	"errors"
+	"io"
 	"io/ioutil"
 	"mime"
 	"net/http"
@@ -66,7 +67,9 @@ func AuthwithAPIKey(apikey string) (*UnasObject, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, errors.New("unsuccessful post")
@@ -103,7 +106,9 @@ func AuthwithPass(a Auth) (*UnasObject, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, errors.New("unsuccessful post")

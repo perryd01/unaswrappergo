@@ -9,7 +9,7 @@ type getProductDBRequest struct {
 	Params *GetProductDBParameters `xml:"Params"`
 }
 
-// Parameters required for GetProductDB request,
+// GetProductDBParameters Parameters required for GetProductDB request,
 // more info at: https://unas.hu/tudastar/api/product#getproductdb-keres
 type GetProductDBParameters struct {
 	Format              string `xml:"Format,omitempty"`
@@ -63,7 +63,7 @@ type getProductDBResponse struct {
 	URL string `xml:"getProductDB>Url"`
 }
 
-// Returns an url where all the products can be downloaded in a .csv file,
+// GetProductDB Returns an url where all the products can be downloaded in a .csv file,
 // the link expires after 1 hour
 // more info at: https://unas.hu/tudastar/api/product#getproductdb-funkcio
 func (uo UnasObject) GetProductDB(params *GetProductDBParameters) (*url.URL, error) {

@@ -63,7 +63,7 @@ type getProductDBResponse struct {
 	URL string `xml:"getProductDB>Url"`
 }
 
-// Returns an url where all of the products can be downloaded in a .csv file,
+// Returns an url where all the products can be downloaded in a .csv file,
 // the link expires after 1 hour
 // more info at: https://unas.hu/tudastar/api/product#getproductdb-funkcio
 func (uo UnasObject) GetProductDB(params *GetProductDBParameters) (*url.URL, error) {

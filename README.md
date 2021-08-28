@@ -18,7 +18,7 @@ Big thanks to [@ondrejoa](https://github.com/ondrejoa) for helping me in this.
 The largest part of the codebase was written in 2021 summer. We cannot guarantee the correct operation in case of an API update. **Feel free to contribute and keep the code up to date.**
 
 ## Code documentation
-Unas API has an often poor so we can't figure out some minor stuff either :confused:
+Unas API has an often poor, so we can't figure out some minor stuff either :confused:
 
 ## Usable API requests
 

@@ -6,7 +6,7 @@ type setProductDBRequest struct {
 	Params *SetProductDBParams `xml:"Params"`
 }
 
-// Request params for SetProductDB request, where an URL can be set for import,
+// Request params for SetProductDB request, where a URL can be set for import,
 // more info at: https://unas.hu/tudastar/api/product#setproductdb-keres
 type SetProductDBParams struct {
 	URL     string `xml:"Url"`

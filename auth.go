@@ -23,10 +23,10 @@ type loginAPIResponse struct {
 
 // Struct which contains data for request authentication
 type login struct {
-	Token       string      `xml:"Login>Token"`
-	Expire      UnasTimeDate      `xml:"Login>Expire"`
-	Permissions permissions `xml:"Login>Permissions"`
-	Status      string      `xml:"Login>Status"`
+	Token       string       `xml:"Login>Token"`
+	Expire      UnasTimeDate `xml:"Login>Expire"`
+	Permissions permissions  `xml:"Login>Permissions"`
+	Status      string       `xml:"Login>Status"`
 }
 
 // Permissions for allowed methods towards Unas
@@ -46,7 +46,7 @@ type Auth struct {
 	AuthCode      string `xml:"AuthCode"`
 }
 
-// AuthwithAPIKey Authenticating using a API key.
+// AuthwithAPIKey Authenticating using an API key.
 // https://unas.hu/tudastar/api/authorization#api-kulcs-alapu-azonositas
 func AuthwithAPIKey(apikey string) (*UnasObject, error) {
 	payload := loginAPIRequest{Params: loginAPIParams{APIKey: apikey}}

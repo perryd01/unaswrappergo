@@ -26,8 +26,8 @@ Endpoint | Support |
 --- | --- |
 AuthwithAPIKey | :heavy_check_mark:
 AuthwithPass | :heavy_check_mark:
-GetNewsletter | :x:
-SetNewsletter | :x:
+GetNewsletter | :question:
+SetNewsletter | :question:
 GetProduct | :x:
 SetProduct | :x:
 GetProductDB | :x:
@@ -40,7 +40,7 @@ GetCategory | :x:
 SetCategory | :x:
 GetCustomer | :x:
 SetCustomer | :x:
-CheckCustomer | :x:
+CheckCustomer | :question:
 GetScriptTag | :x:
 SetScriptTag | :x:
 GetPage | :x:
@@ -53,5 +53,3 @@ GetProductParameter | :x:
 SetProductParameter | :x:
 GetAutomatism | :x:
 SetAutomatism | :x:
-GetNewsletter | :x:
-SetNewsletter | :x:

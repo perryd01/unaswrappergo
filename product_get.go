@@ -29,7 +29,7 @@ func (uo *UnasObject) GetProduct(p *GetProductRequestParams) ([]*Product, error)
 	if err != nil {
 		return nil, err
 	}
-	resp, err := uo.makeRequest(endpointEnumType(GetProduct), bodyMarshaled)
+	resp, err := uo.makeRequest(GetProduct, bodyMarshaled)
 	if err != nil {
 		return nil, err
 	}

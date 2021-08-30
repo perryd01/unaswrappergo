@@ -74,7 +74,7 @@ func (uo UnasObject) GetProductDB(params *GetProductDBParameters) (*url.URL, err
 		return nil, err
 	}
 
-	response, err := uo.makeRequest(endpointEnumType(GetProductDB), b)
+	response, err := uo.makeRequest(GetProductDB, b)
 	if err != nil {
 		return nil, err
 	}
@@ -86,10 +86,10 @@ func (uo UnasObject) GetProductDB(params *GetProductDBParameters) (*url.URL, err
 		return nil, err
 	}
 
-	url, err := url.Parse(gpDBresponse.URL)
+	downloadableDBurl, err := url.Parse(gpDBresponse.URL)
 	if err != nil {
 		return nil, err
 	}
 
-	return url, nil
+	return downloadableDBurl, nil
 }

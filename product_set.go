@@ -32,7 +32,7 @@ func (uo *UnasObject) SetProduct(products []*Product) ([]*productStatus, error) 
 	if err != nil {
 		return nil, err
 	}
-	r, err := uo.makeRequest(endpointEnumType(SetProduct), b)
+	r, err := uo.makeRequest(SetProduct, b)
 	if err != nil {
 		return nil, err
 	}

@@ -16,7 +16,8 @@ type loginAPIRequest struct {
 }
 
 type loginAPIParams struct {
-	APIKey string `xml:"ApiKey"`
+	APIKey  string `xml:"ApiKey"`
+	XMLName xml.Name
 }
 
 type loginAPIResponse struct {
@@ -51,7 +52,10 @@ type Auth struct {
 // AuthwithAPIKey Authenticating using an API key.
 // https://unas.hu/tudastar/api/authorization#api-kulcs-alapu-azonositas
 func AuthwithAPIKey(apikey string) (*UnasObject, error) {
-	payload := loginAPIRequest{Params: loginAPIParams{APIKey: apikey}}
+	payload := loginAPIParams{
+		APIKey:  apikey,
+		XMLName: xml.Name{Local: "Params"},
+	}
 	xmlpayload, err := xml.Marshal(payload)
 	if err != nil {
 		return nil, err
@@ -62,8 +66,6 @@ func AuthwithAPIKey(apikey string) (*UnasObject, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println(string(reqBuf.Bytes()))
 
 	req, err := http.NewRequest("POST", string(LoginEndPoint), reqBuf)
 	if err != nil {

@@ -5,13 +5,10 @@ import (
 	"strconv"
 )
 
-type checkCustomerRequest struct {
-	Params checkCustomerParams `xml:"Params"`
-}
-
 type checkCustomerParams struct {
-	User     string `xml:"User"`
-	Password string `xml:"Password"`
+	XMLName  xml.Name `xml:"Params"`
+	User     string   `xml:"User"`
+	Password string   `xml:"Password"`
 }
 
 type checkCustomerResponse struct {
@@ -19,9 +16,8 @@ type checkCustomerResponse struct {
 }
 
 func (uo *UnasObject) CheckCustomer(user *string, password *string) (*bool, error) {
-	params := checkCustomerParams{User: *user, Password: *password}
-	reqbody := checkCustomerRequest{Params: params}
-	b, err := xml.Marshal(reqbody)
+	params := checkCustomerParams{User: *user, Password: *password, XMLName: xml.Name{Local: "Params"}}
+	b, err := xml.Marshal(params)
 	if err != nil {
 		return nil, err
 	}

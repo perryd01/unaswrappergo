@@ -13,7 +13,7 @@ var apiKey string
 func init() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
-	apiKey = os.Getenv(apiKey)
+	apiKey = os.Getenv("apiKey")
 }
 
 func main() {

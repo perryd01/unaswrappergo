@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/xml"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"mime"
@@ -56,7 +57,15 @@ func AuthwithAPIKey(apikey string) (*UnasObject, error) {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", string(LoginEndPoint), bytes.NewBuffer(xmlpayload))
+	reqBuf := bytes.NewBuffer([]byte(xml.Header))
+	_, err = reqBuf.Write(xmlpayload)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println(string(reqBuf.Bytes()))
+
+	req, err := http.NewRequest("POST", string(LoginEndPoint), reqBuf)
 	if err != nil {
 		return nil, err
 	}
@@ -71,10 +80,13 @@ func AuthwithAPIKey(apikey string) (*UnasObject, error) {
 		_ = Body.Close()
 	}(resp.Body)
 
+	fmt.Println(resp.StatusCode)
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println(string(body))
+
 	if resp.StatusCode != http.StatusOK {
 		return nil, errors.New("unsuccessful post")
 	}
-	body, _ := ioutil.ReadAll(resp.Body)
 	xmlresponse := loginAPIResponse{}
 	err = xml.Unmarshal(body, &xmlresponse)
 	if err != nil {

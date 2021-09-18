@@ -4,39 +4,30 @@ import (
 	"bytes"
 	"encoding/xml"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"mime"
 	"net/http"
 )
 
-type loginAPIRequest struct {
-	Params loginAPIParams `xml:"Params"`
-}
-
 type loginAPIParams struct {
-	APIKey string `xml:"ApiKey"`
-}
-
-type loginAPIResponse struct {
-	Login login `xml:"Login"`
+	APIKey  string `xml:"ApiKey"`
+	XMLName xml.Name
 }
 
 // Struct which contains data for request authentication
 type login struct {
-	Token       string       `xml:"Login>Token"`
-	Expire      UnasTimeDate `xml:"Login>Expire"`
-	Permissions permissions  `xml:"Login>Permissions"`
-	Status      string       `xml:"Login>Status"`
+	XMLName     xml.Name     `xml:"Login"`
+	Token       string       `xml:"Token"`
+	Expire      UnasTimeDate `xml:"Expire"`
+	Permissions permissions  `xml:"Permissions"`
+	Status      string       `xml:"Status"`
 }
 
 // Permissions for allowed methods towards Unas
 type permissions struct {
 	Permission []string `xml:"Permission"`
-}
-
-type authPassRequest struct {
-	Auth Auth `xml:"Auth"`
 }
 
 // Auth Struct for login with user:pass
@@ -47,16 +38,33 @@ type Auth struct {
 	AuthCode      string `xml:"AuthCode"`
 }
 
+type authPassRequest struct {
+	XMLName       xml.Name `xml:"Auth"`
+	Username      string   `xml:"Username"`
+	PasswordCrypt string   `xml:"PasswordCrypt"`
+	ShopId        string   `xml:"ShopId"`
+	AuthCode      string   `xml:"AuthCode"`
+}
+
 // AuthwithAPIKey Authenticating using an API key.
 // https://unas.hu/tudastar/api/authorization#api-kulcs-alapu-azonositas
 func AuthwithAPIKey(apikey string) (*UnasObject, error) {
-	payload := loginAPIRequest{Params: loginAPIParams{APIKey: apikey}}
+	payload := loginAPIParams{
+		APIKey:  apikey,
+		XMLName: xml.Name{Local: "Params"},
+	}
 	xmlpayload, err := xml.Marshal(payload)
 	if err != nil {
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", string(LoginEndPoint), bytes.NewBuffer(xmlpayload))
+	reqBuf := bytes.NewBuffer([]byte(xml.Header))
+	_, err = reqBuf.Write(xmlpayload)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", string(LoginEndPoint), reqBuf)
 	if err != nil {
 		return nil, err
 	}
@@ -71,18 +79,21 @@ func AuthwithAPIKey(apikey string) (*UnasObject, error) {
 		_ = Body.Close()
 	}(resp.Body)
 
+	fmt.Println(resp.StatusCode)
+	body, _ := ioutil.ReadAll(resp.Body)
+
 	if resp.StatusCode != http.StatusOK {
 		return nil, errors.New("unsuccessful post")
 	}
-	body, _ := ioutil.ReadAll(resp.Body)
-	xmlresponse := loginAPIResponse{}
+
+	xmlresponse := login{}
 	err = xml.Unmarshal(body, &xmlresponse)
 	if err != nil {
 		return nil, err
 	}
 
 	uo := UnasObject{
-		Login: xmlresponse.Login,
+		Login: xmlresponse,
 	}
 
 	return &uo, nil
@@ -90,12 +101,20 @@ func AuthwithAPIKey(apikey string) (*UnasObject, error) {
 
 // AuthwithPass Authenticating using a User:Pass combo.
 // https://unas.hu/tudastar/api/authorization#felhasznalonev-alapu-azonositas
+
 func AuthwithPass(a Auth) (*UnasObject, error) {
-	xmlpayload, err := xml.Marshal(authPassRequest{Auth: a})
+	xmlpayload, err := xml.Marshal(authPassRequest{XMLName: xml.Name{Local: "Auth"}, Username: a.Username, ShopId: a.ShopID, PasswordCrypt: a.PasswordCrypt, AuthCode: a.AuthCode})
 	if err != nil {
 		return nil, err
 	}
-	req, err := http.NewRequest("POST", string(LoginEndPoint), bytes.NewBuffer(xmlpayload))
+
+	reqBuf := bytes.NewBuffer([]byte(xml.Header))
+	_, err = reqBuf.Write(xmlpayload)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", string(LoginEndPoint), reqBuf)
 	if err != nil {
 		return nil, err
 	}
@@ -110,18 +129,21 @@ func AuthwithPass(a Auth) (*UnasObject, error) {
 		_ = Body.Close()
 	}(resp.Body)
 
+	fmt.Println(resp.StatusCode)
+	body, _ := ioutil.ReadAll(resp.Body)
+
 	if resp.StatusCode != http.StatusOK {
 		return nil, errors.New("unsuccessful post")
 	}
-	body, _ := ioutil.ReadAll(resp.Body)
-	xmlresponse := loginAPIResponse{}
+
+	xmlresponse := login{}
 	err = xml.Unmarshal(body, &xmlresponse)
 	if err != nil {
 		return nil, err
 	}
 
 	uo := UnasObject{
-		Login: xmlresponse.Login,
+		Login: xmlresponse,
 	}
 
 	return &uo, nil

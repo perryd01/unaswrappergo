@@ -1,6 +1,9 @@
 package unaswrappergo
 
+import "encoding/xml"
+
 type Product struct {
+	XMLName             xml.Name                   `xml:"Product"`
 	Action              string                     `xml:"Action,omitempty"`
 	State               string                     `xml:"State"`
 	Id                  string                     `xml:"ID"`

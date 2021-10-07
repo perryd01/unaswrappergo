@@ -2,6 +2,7 @@ package unaswrappergo
 
 import (
 	"bytes"
+	"encoding/xml"
 	"errors"
 	"io"
 	"io/ioutil"
@@ -10,10 +11,19 @@ import (
 
 // Func that handles making requests to specific endpointEnumType endpoints.
 func (uo *UnasObject) makeRequest(endpoint endpointEnumType, body []byte) ([]byte, error) {
-	if tokenExpired(*uo.Login.Expire.ToTime()) {
-		return nil, errors.New("login token already expired")
+	/*
+		if tokenExpired(*uo.Login.Expire.ToTime()) {
+			return nil, errors.New("login token already expired")
+		}
+	*/
+
+	reqBuf := bytes.NewBuffer([]byte(xml.Header))
+	_, err := reqBuf.Write(body)
+	if err != nil {
+		return nil, err
 	}
-	req, err := http.NewRequest("POST", string(endpoint), bytes.NewBuffer(body))
+
+	req, err := http.NewRequest("POST", string(endpoint), reqBuf)
 	if err != nil {
 		return nil, err
 	}

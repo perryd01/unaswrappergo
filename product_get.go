@@ -2,13 +2,16 @@ package unaswrappergo
 
 import (
 	"encoding/xml"
+	"fmt"
 )
 
-type getProductRequest struct {
-	Params GetProductRequestParams `xml:"Params"`
+type getProductRequestResponse struct {
+	XMLName xml.Name `xml:"Products"`
+	Products []*Product `xml:"Product"`
 }
 
 type GetProductRequestParams struct {
+	XMLName      xml.Name         `xml:"Params"`
 	StatusBase   *statusBaseEnum  `xml:"StatusBase,omitempty"`   // termék alap státusza; 0 – nem aktív; 1 – aktív; 2 – aktív, új; 3 – aktív, nem vásárolható;
 	ID           string           `xml:"Id,omitempty"`           // termék egyedi azonosítója, ha ezt megadtad, akkor az Sku értéket figyelmen kívül hagyjuk
 	Sku          string           `xml:"Sku,omitempty"`          // termék cikkszáma
@@ -24,8 +27,8 @@ type GetProductRequestParams struct {
 }
 
 func (uo *UnasObject) GetProduct(p *GetProductRequestParams) ([]*Product, error) {
-	obj := getProductRequest{Params: *p}
-	bodyMarshaled, err := xml.Marshal(obj)
+	bodyMarshaled, err := xml.Marshal(p)
+	fmt.Print(string(bodyMarshaled))
 	if err != nil {
 		return nil, err
 	}
@@ -34,11 +37,11 @@ func (uo *UnasObject) GetProduct(p *GetProductRequestParams) ([]*Product, error)
 		return nil, err
 	}
 
-	var products = make([]*Product, 0)
+	var products = getProductRequestResponse{}
 
 	err = xml.Unmarshal(resp, &products)
 	if err != nil {
 		return nil, err
 	}
-	return products, nil
+	return products.Products, nil
 }

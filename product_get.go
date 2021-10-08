@@ -6,7 +6,7 @@ import (
 )
 
 type getProductRequestResponse struct {
-	XMLName xml.Name `xml:"Products"`
+	XMLName  xml.Name   `xml:"Products"`
 	Products []*Product `xml:"Product"`
 }
 

@@ -3,49 +3,49 @@ package unaswrappergo
 import "encoding/xml"
 
 type Product struct {
-	XMLName             xml.Name                   `xml:"Product"`
-	Action              string                     `xml:"Action,omitempty"`
-	State               string                     `xml:"State"`
-	Id                  string                     `xml:"ID"`
-	Sku                 string                     `xml:"Sku"`
-	SkuNew              string                     `xml:"SkuNew,omitempty"`
-	History             []ProductEventType         `xml:"History>Event,omitempty"`
-	Statuses            []ProductStatusType        `xml:"Statuses>Status,omitempty"`
-	NoList              bool                       `xml:"NoList,omitempty"`
-	Inquire             bool                       `xml:"Inquire,omitempty"`
-	CustDiscountDisable bool                       `xml:"CustDiscountDisable,omitempty"`
-	Explicit            bool                       `xml:"Explicit,omitempty"`
-	Export              *ProductExportType         `xml:"Export,omitempty"`
-	PublicInterval      *ProductPublicIntervalType `xml:"PublicInterval,omitempty"`
-	Name                string                     `xml:"Name,omitempty"`
-	Unit                string                     `xml:"Unit,omitempty"`
-	MinimumQty          string                     `xml:"MinimumQty,omitempty"`
-	MaximumQty          string                     `xml:"MaximumQty,omitempty"`
-	AlertQty            *uint64                    `xml:"AlertQty,omitempty"`
-	UnitStep            string                     `xml:"UnitStep,omitempty"`
-	AlterUnit           *ProductAlterUnitType      `xml:"AlterUnit,omitempty"`
-	Weight              *float64                   `xml:"Weight,omitempty"`
-	Point               *uint64                    `xml:"Point,omitempty"`
-	BuyableWithPoint    *string                    `xml:"BuyableWithPoint,omitempty"`
-	Description         *ProductDescriptionType    `xml:"Description,omitempty"`
-	Prices              []ProductPriceType         `xml:"Prices>Price,omitempty"`
-	Categories          []ProductCategoryType      `xml:"Categories>Category,omitempty"`
-	Url                 *string                    `xml:"Url,omitempty"`
-	SefUrl              *string                    `xml:"SefUrl,omitempty"`
-	Images              *ProductImagesType         `xml:"Images,omitempty"`
-	Variants            []ProductVariantType       `xml:"Variants>Variant,omitempty"`
-	Datas               []ProductDataType          `xml:"Datas>Data,omitempty"`
-	Params              []ProductParamType         `xml:"Params>Param,omitempty"`
-	// AdditionalDatas
-	// QtyDsicount
-	// AdditionalProducts
-	// SimilarProducts
-	// Stocks
-	// OnlineContent
-	// Types
-	// PackageProduct
-	// Meta
-	// AutoMaticMeta
+	XMLName             xml.Name                       `xml:"Product"`
+	Action              string                         `xml:"Action,omitempty"`
+	State               string                         `xml:"State"`
+	ID                  string                         `xml:"Id"`
+	Sku                 string                         `xml:"Sku"`
+	SkuNew              string                         `xml:"SkuNew,omitempty"`
+	History             []ProductEventType             `xml:"History>Event,omitempty"`
+	Statuses            []ProductStatusType            `xml:"Statuses>Status,omitempty"`
+	NoList              bool                           `xml:"NoList,omitempty"`
+	Inquire             bool                           `xml:"Inquire,omitempty"`
+	CustDiscountDisable bool                           `xml:"CustDiscountDisable,omitempty"`
+	Explicit            bool                           `xml:"Explicit,omitempty"`
+	Export              *ProductExportType             `xml:"Export,omitempty"`
+	PublicInterval      *ProductPublicIntervalType     `xml:"PublicInterval,omitempty"`
+	Name                string                         `xml:"Name,omitempty"`
+	Unit                string                         `xml:"Unit,omitempty"`
+	MinimumQty          string                         `xml:"MinimumQty,omitempty"`
+	MaximumQty          string                         `xml:"MaximumQty,omitempty"`
+	AlertQty            *uint64                        `xml:"AlertQty,omitempty"`
+	UnitStep            string                         `xml:"UnitStep,omitempty"`
+	AlterUnit           *ProductAlterUnitType          `xml:"AlterUnit,omitempty"`
+	Weight              *float64                       `xml:"Weight,omitempty"`
+	Point               *uint64                        `xml:"Point,omitempty"`
+	BuyableWithPoint    *string                        `xml:"BuyableWithPoint,omitempty"`
+	Description         *ProductDescriptionType        `xml:"Description,omitempty"`
+	Prices              []ProductPriceType             `xml:"Prices>Price,omitempty"`
+	Categories          []ProductCategoryType          `xml:"Categories>Category,omitempty"`
+	Url                 *string                        `xml:"Url,omitempty"`
+	SefUrl              *string                        `xml:"SefUrl,omitempty"`
+	Images              *ProductImagesType             `xml:"Images,omitempty"`
+	Variants            []ProductVariantType           `xml:"Variants>Variant,omitempty"`
+	Datas               []ProductDataType              `xml:"Datas>Data,omitempty"`
+	Params              []ProductParamType             `xml:"Params>Param,omitempty"`
+	AdditionalDatas     []ProductAdditionalDataType    `xml:"AdditionalDatas>AdditionalData"`
+	PackageProduct      string                         `xml:"PackageProduct,omitempty"` // A termék csomagtermék e vagy sem
+	Stocks              *ProductStocksType             `xml:"Stocks,omitempty"`
+	OnlineContent       *ProductOnlineContentType      `xml:"OnlineContent,omitempty"`
+	Types               *ProductTypesType              `xml:"Types,omitempty"`
+	Meta                *ProductMetaType               `xml:"Meta,omitempty"`
+	AutomaticMeta       *ProductAutomaticMetaType      `xml:"AutomaticMeta,omitempty"`
+	QtyDiscount         *ProductQtyDiscountType        `xml:"QtyDiscount,omitempty"`
+	SimilarProducts     []ProductSimilarProductType    `xml:"SimilarProducts>SimilarProduct,omitempty"`
+	AdditionalProducts  []ProductAdditionalProductType `xml:"AdditionalProducts>AdditionalProduct,omitempty"`
 }
 
 type ProductEventType struct {
@@ -151,4 +151,67 @@ type ProductParamType struct {
 	Value  string `xml:"Value,omitempty"`
 	Before string `xml:"Before,omitempty"`
 	After  string `xml:"After,omitempty"`
+}
+
+type ProductStocksType struct {
+	Status struct {
+		Active  string `xml:"Active,omitempty"`
+		Empty   string `xml:"Empty,omitempty"`
+		Variant string `xml:"Variant,omitempty"`
+	} `xml:"Status"`
+	Stock []struct {
+		Variant []string `xml:"Variants>Variant,omitempty"`
+		Qty     *uint64  `xml:"Qty,omitempty"`
+	} `xml:"Stock,omitempty"`
+}
+
+type ProductAdditionalDataType struct {
+	ID      string `xml:"Id,omitempty"`
+	Title   string `xml:"Title,omitempty"`
+	Content string `xml:"Content,omitempty"`
+}
+
+type ProductOnlineContentType struct {
+	URL      string `xml:"Url,omitempty"`
+	Limit    string `xml:"Limit,omitempty"`
+	Filename string `xml:"Filename,omitempty"`
+}
+
+type ProductTypesType struct {
+	Type    string `xml:"Type,omitempty"`
+	Parent  string `xml:"Parent,omitempty"`
+	Display string `xml:"Display,omitempty"`
+	Order   string `xml:"Order,omitempty"`
+}
+
+type ProductMetaType struct {
+	Keywords    string `xml:"Keywords,omitempty"`
+	Description string `xml:"Description,omitempty"`
+	Title       string `xml:"Title,omitempty"`
+}
+type ProductAutomaticMetaType struct {
+	Keywords    string `xml:"Keywords,omitempty"`
+	Description string `xml:"Description,omitempty"`
+	Title       string `xml:"Title,omitempty"`
+}
+
+type ProductQtyDiscountType struct {
+	Step []struct {
+		Limit struct {
+			Lower string `xml:"Lower,omitempty"`
+			Upper string `xml:"Upper,omitempty"`
+		} `xml:"Limit,omitempty"`
+		Discount string `xml:"Discount,omitempty"`
+	} `xml:"Step,omitempty"`
+}
+type ProductSimilarProductType struct {
+	ID   string `xml:"Id,omitempty"`
+	Sku  string `xml:"Sku,omitempty"`
+	Name string `xml:"Name,omitempty"`
+}
+
+type ProductAdditionalProductType struct {
+	ID   string `xml:"Id,omitempty"`
+	Sku  string `xml:"Sku,omitempty"`
+	Name string `xml:"Name,omitempty"`
 }

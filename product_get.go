@@ -2,7 +2,6 @@ package unaswrappergo
 
 import (
 	"encoding/xml"
-	"fmt"
 )
 
 type getProductRequestResponse struct {
@@ -28,7 +27,6 @@ type GetProductRequestParams struct {
 
 func (uo *UnasObject) GetProduct(p *GetProductRequestParams) ([]*Product, error) {
 	bodyMarshaled, err := xml.Marshal(p)
-	fmt.Print(string(bodyMarshaled))
 	if err != nil {
 		return nil, err
 	}

@@ -79,7 +79,6 @@ func AuthwithAPIKey(apikey string) (*UnasObject, error) {
 		_ = Body.Close()
 	}(resp.Body)
 
-	fmt.Println(resp.StatusCode)
 	body, _ := ioutil.ReadAll(resp.Body)
 
 	if resp.StatusCode != http.StatusOK {

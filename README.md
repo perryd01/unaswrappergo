@@ -36,8 +36,8 @@ GetOrder | :x:
 SetOrder | :x:
 GetStock | :x:
 SetStock | :x:
-GetCategory | :x:
-SetCategory | :x:
+GetCategory | :heavy_check_mark:
+SetCategory | :heavy_check_mark:
 GetCustomer | :x:
 SetCustomer | :x:
 CheckCustomer | :question:

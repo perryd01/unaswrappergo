@@ -1,14 +1,17 @@
 package unaswrappergo
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+)
 
 // GetNewsletterParams Params to set for querying newsletter subscribers
 // https://unas.hu/tudastar/api/newsletter#getnewsletter-keres
 type GetNewsletterParams struct {
-	Type      string        `xml:"Params>Type,omitempty"`
-	Auth      string        `xml:"Params>Auth,omitempty"` //TODO bool
-	TimeStart UnasTimeStamp `xml:"Params>TimeStart,omitempty"`
-	TimeEnd   UnasTimeStamp `xml:"Params>TimeEnd,omitempty"`
+	XMLName   xml.Name      `xml:"Params,omitempty"`
+	Type      string        `xml:"Type,omitempty"`
+	Auth      string        `xml:"Auth,omitempty"` //TODO bool
+	TimeStart UnasTimeStamp `xml:"TimeStart,omitempty"`
+	TimeEnd   UnasTimeStamp `xml:"TimeEnd,omitempty"`
 }
 
 type getNewsletterResponse struct {
@@ -27,9 +30,10 @@ type NewsletterSubscriber struct {
 }
 
 type SetNewsletterSubscriberParams struct {
-	Action string `xml:"Action,omitempty"`
-	Email  string `xml:"Email,omitempty"`
-	Name   string `xml:"Name,omitempty"`
+	XMLName xml.Name `xml:"Params"`
+	Action  string   `xml:"Action,omitempty"`
+	Email   string   `xml:"Email,omitempty"`
+	Name    string   `xml:"Name,omitempty"`
 }
 
 type SetNewsletterSubscriberStatus struct {
@@ -37,12 +41,6 @@ type SetNewsletterSubscriberStatus struct {
 	Email  string `xml:"Email,omitempty"`
 	Name   string `xml:"Name,omitempty"`
 	Status string `xml:"Status,omitempty"`
-}
-
-// SetNewsletterRequest
-// https://unas.hu/tudastar/api/newsletter#setnewsletter-keres
-type setNewsletterRequest struct {
-	Subscribers []*SetNewsletterSubscriberParams `xml:"Subscribers"`
 }
 
 // SetNewsletterResponse
@@ -77,7 +75,7 @@ func (uo UnasObject) GetNewsletter(params *GetNewsletterParams) ([]*NewsletterSu
 // SetNewsletter Add/Modify/Delete data of newsletter subscribers
 // https://unas.hu/tudastar/api/newsletter#setnewsletter-funkcio
 func (uo UnasObject) SetNewsletter(subscribers []*SetNewsletterSubscriberParams) ([]*SetNewsletterSubscriberStatus, error) {
-	snreq := setNewsletterRequest{Subscribers: subscribers}
+	snreq := subscribers
 
 	b, err := xml.Marshal(snreq)
 	if err != nil {

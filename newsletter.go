@@ -28,14 +28,14 @@ type NewsletterSubscriber struct {
 
 type SetNewsletterSubscriberParams struct {
 	Action string `xml:"Action,omitempty"`
-	Email string `xml:"Email,omitempty"`
-	Name string `xml:"Name,omitempty"`
+	Email  string `xml:"Email,omitempty"`
+	Name   string `xml:"Name,omitempty"`
 }
 
 type SetNewsletterSubscriberStatus struct {
 	Action string `xml:"Action,omitempty"`
-	Email string `xml:"Email,omitempty"`
-	Name string `xml:"Name,omitempty"`
+	Email  string `xml:"Email,omitempty"`
+	Name   string `xml:"Name,omitempty"`
 	Status string `xml:"Status,omitempty"`
 }
 
@@ -44,6 +44,7 @@ type SetNewsletterSubscriberStatus struct {
 type setNewsletterRequest struct {
 	Subscribers []*SetNewsletterSubscriberParams `xml:"Subscribers"`
 }
+
 // SetNewsletterResponse
 // https://unas.hu/tudastar/api/newsletter#setnewsletter-valasz
 type setNewsletterResponse struct {
@@ -90,7 +91,7 @@ func (uo UnasObject) SetNewsletter(subscribers []*SetNewsletterSubscriberParams)
 
 	snresp := setNewsletterResponse{}
 
-	err = xml.Unmarshal(r, snresp)
+	err = xml.Unmarshal(r, &snresp)
 	if err != nil {
 		return nil, err
 	}

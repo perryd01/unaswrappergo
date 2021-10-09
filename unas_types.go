@@ -29,17 +29,18 @@ func (date *UnasDate) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error
 
 // UnasTimeDate UnasDate YYYY.MM.DD HH:MM:SS TimeDate format
 type UnasTimeDate time.Time
-func (timedate *UnasTimeDate) ToTime() *time.Time{
+
+func (timedate *UnasTimeDate) ToTime() *time.Time {
 	return (*time.Time)(timedate)
 }
 func (timedate UnasTimeDate) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	return e.EncodeElement(time.Time(timedate).Format("2006.01.02 03:04:05"), start)
+	return e.EncodeElement(time.Time(timedate).Format("2006.01.02 15:04:05"), start)
 }
 func (timedate *UnasTimeDate) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	var s string
 	err := d.DecodeElement(&s, &start)
 	if err == nil {
-		*(*time.Time)(timedate), err = time.Parse("2006.01.02 03:04:05", s)
+		*(*time.Time)(timedate), err = time.Parse("2006.01.02 15:04:05", s)
 	}
 	return err
 }

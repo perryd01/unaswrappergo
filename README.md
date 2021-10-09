@@ -18,7 +18,7 @@ Big thanks to [@ondrejoa](https://github.com/ondrejoa) for helping me in this.
 The largest part of the codebase was written in 2021 summer. We cannot guarantee the correct operation in case of an API update. **Feel free to contribute and keep the code up to date.**
 
 ## Code documentation
-Unas API has an often poor so we can't figure out some minor stuff either :confused:
+Unas API has an often poor, so we can't figure out some minor stuff either :confused:
 
 ## Usable API requests
 
@@ -26,8 +26,8 @@ Endpoint | Support |
 --- | --- |
 AuthwithAPIKey | :heavy_check_mark:
 AuthwithPass | :heavy_check_mark:
-GetNewsletter | :x:
-SetNewsletter | :x:
+GetNewsletter | :question:
+SetNewsletter | :question:
 GetProduct | :x:
 SetProduct | :x:
 GetProductDB | :x:
@@ -40,7 +40,7 @@ GetCategory | :x:
 SetCategory | :x:
 GetCustomer | :x:
 SetCustomer | :x:
-CheckCustomer | :x:
+CheckCustomer | :question:
 GetScriptTag | :x:
 SetScriptTag | :x:
 GetPage | :x:
@@ -53,5 +53,3 @@ GetProductParameter | :x:
 SetProductParameter | :x:
 GetAutomatism | :x:
 SetAutomatism | :x:
-GetNewsletter | :x:
-SetNewsletter | :x:

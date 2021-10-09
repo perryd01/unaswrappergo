@@ -1,0 +1,3 @@
+package unaswrappergo
+
+func init() {}

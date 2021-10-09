@@ -6,7 +6,7 @@ type setProductDBRequest struct {
 	Params *SetProductDBParams `xml:"Params"`
 }
 
-// Request params for SetProductDB request, where an URL can be set for import,
+// SetProductDBParams Request params for SetProductDB request, where a URL can be set for import,
 // more info at: https://unas.hu/tudastar/api/product#setproductdb-keres
 type SetProductDBParams struct {
 	URL     string `xml:"Url"`
@@ -15,7 +15,7 @@ type SetProductDBParams struct {
 	Lang    string `xml:"Lang"`
 }
 
-// Response from a SetProductDB request that contains logs from the result of the import,
+// SetProductDBResponse Response from a SetProductDB request that contains logs from the result of the import,
 // more info at: https://unas.hu/tudastar/api/product#setproductdb-valasz
 type SetProductDBResponse struct {
 	ModifiedProducts uint64                     `xml:"setProductDB>Ok>Modify,omitempty"`
@@ -27,12 +27,12 @@ type SetProductDBResponse struct {
 type SetProductDBResponseErrors struct {
 	UnknownColumns    uint64 `xml:"UnknownColumns,omitempty"`
 	FaultyProducts    uint64 `xml:"FaultyProducts,omitempty"`
-	SKU_Duplicity     uint64 `xml:"SKU_Duplicity,omitempty"`
+	SkuDuplicity      uint64 `xml:"SKU_Duplicity,omitempty"`
 	NewProductFewData uint64 `xml:"NewProductFewData,omitempty"`
 	LimitError        uint64
 }
 
-// Importing a csv? from an url into the webshop database,
+// SetProductDB Importing a csv? from an url into the webshop database,
 // more info at: https://unas.hu/tudastar/api/product#setproductdb-funkcio
 func (uo UnasObject) SetProductDB(params *SetProductDBParams) (*SetProductDBResponse, error) {
 	reqBody := setProductDBRequest{Params: params}

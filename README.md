@@ -1,5 +1,5 @@
 # Unas API wrapper lib for Golang
-[![Coverage Status](https://coveralls.io/repos/github/perryd01/unaswrappergo/badge.svg?branch=main)](https://coveralls.io/github/perryd01/unaswrappergo?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/perryd01/unaswrappergo/badge.svg?branch=main)](https://coveralls.io/github/perryd01/unaswrappergo?branch=main) [![Go Reference](https://pkg.go.dev/badge/github.com/perryd01/unaswrappergo.svg)](https://pkg.go.dev/github.com/perryd01/unaswrappergo)
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/perrydlol)
 

@@ -2,6 +2,9 @@ package unaswrappergo
 
 import (
 	"encoding/xml"
+	"fmt"
+	"strconv"
+	"sync"
 )
 
 type getProductRequestResponse struct {
@@ -42,4 +45,63 @@ func (uo *UnasObject) GetProduct(p *GetProductRequestParams) ([]*Product, error)
 		return nil, err
 	}
 	return products.Products, nil
+}
+
+func (uo *UnasObject) GetProductParallel(p *GetProductRequestParams, chunkSize uint32, allProductNumber uint32) ([]*Product, error) {
+	numberOfChunks := allProductNumber / chunkSize
+	if allProductNumber%chunkSize != 0 {
+		numberOfChunks++
+	}
+	if numberOfChunks > 30 {
+		fmt.Println("You might be exceeding Unas API limit")
+	}
+
+	ch := make(chan string) //p.LimitNum = strconv.Itoa(int(chunkSize))
+
+	var wg sync.WaitGroup
+	products := make([]*Product, 0)
+
+	var parameters = make([]*GetProductRequestParams, 0)
+	for i := 0; i < int(numberOfChunks); i++ {
+		t := GetProductRequestParams{
+			XMLName:      p.XMLName,
+			StatusBase:   p.StatusBase,
+			ID:           p.ID,
+			Sku:          p.Sku,
+			Parent:       p.Parent,
+			TimeStart:    p.TimeStart,
+			TimeEnd:      p.TimeEnd,
+			DateStart:    p.DateStart,
+			DateEnd:      p.DateEnd,
+			ContentType:  p.ContentType,
+			ContentParam: p.ContentParam,
+			LimitNum:     strconv.Itoa(int(chunkSize)),
+		}
+		t.LimitStart = strconv.Itoa(i*int(chunkSize) + 1)
+		parameters = append(parameters, &t)
+	}
+
+	for _, param := range parameters {
+		bodyMarshaled, err := xml.Marshal(param)
+		if err != nil {
+			return nil, err
+		}
+		wg.Add(1)
+		go uo.makeRequestParallel(GetProduct, bodyMarshaled, ch, &wg)
+	}
+
+	go func() {
+		wg.Wait()
+		close(ch)
+	}()
+
+	for res := range ch {
+		temp := getProductRequestResponse{}
+		err := xml.Unmarshal([]byte(res), &temp)
+		if err != nil {
+			return nil, err
+		}
+		products = append(products, temp.Products...)
+	}
+	return products, nil
 }

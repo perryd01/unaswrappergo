@@ -1,6 +1,10 @@
 package unaswrappergo
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+	"jaytaylor.com/html2text"
+	"regexp"
+)
 
 type Product struct {
 	XMLName             xml.Name                       `xml:"Product"`
@@ -62,8 +66,33 @@ type ProductCategoryType struct {
 }
 
 type ProductDescriptionType struct {
-	Short string `xml:"Short"`
-	Long  string `xml:"Long"`
+	Short *ProductDescriptionLongType `xml:"Short"`
+	Long  *ProductDescriptionLongType `xml:"Long"`
+}
+
+type ProductDescriptionLongType struct {
+	Original  *string
+	PlainText *string
+}
+
+func (desc *ProductDescriptionLongType) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
+	var s string
+	err := d.DecodeElement(&s, &start)
+	if s == "" {
+		desc.Original = nil
+		desc.PlainText = nil
+	}
+	if err == nil {
+		desc.Original = &s
+		text, err := html2text.FromString(s)
+		if err != nil {
+			return err
+		}
+		r := regexp.MustCompile("(\\t|\\r?\\n)+")
+		description := r.ReplaceAllString(text, " ")
+		desc.PlainText = &description
+	}
+	return err
 }
 
 type ProductPriceType struct {

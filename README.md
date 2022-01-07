@@ -22,34 +22,34 @@ Unas API has an often poor, so we can't figure out some minor stuff either :conf
 
 ## Usable API requests
 
-Endpoint | Support |
---- | --- |
-AuthwithAPIKey | :heavy_check_mark:
-AuthwithPass | :heavy_check_mark:
-GetNewsletter | :question:
-SetNewsletter | :question:
-GetProduct | :x:
-SetProduct | :x:
-GetProductDB | :x:
-SetProductDB | :x:
-GetOrder | :x:
-SetOrder | :x:
-GetStock | :x:
-SetStock | :x:
-GetCategory | :heavy_check_mark:
-SetCategory | :heavy_check_mark:
-GetCustomer | :x:
-SetCustomer | :x:
-CheckCustomer | :question:
-GetScriptTag | :x:
-SetScriptTag | :x:
-GetPage | :x:
-SetPage | :x:
-GetPageContent | :x:
-SetPageContent | :x:
-GetStorage | :x:
-SetStorage | :x:
-GetProductParameter | :x:
-SetProductParameter | :x:
-GetAutomatism | :x:
-SetAutomatism | :x:
+| Endpoint            | Support              |
+|---------------------|----------------------|
+| AuthwithAPIKey      | :heavy_check_mark:   |
+| AuthwithPass        | not gonna support it |
+| GetNewsletter       | :question:           |
+| SetNewsletter       | :question:           |
+| GetProduct          | :x:                  |
+| SetProduct          | :x:                  |
+| GetProductDB        | :x:                  |
+| SetProductDB        | :x:                  |
+| GetOrder            | :x:                  |
+| SetOrder            | :x:                  |
+| GetStock            | :x:                  |
+| SetStock            | :x:                  |
+| GetCategory         | :heavy_check_mark:   |
+| SetCategory         | :heavy_check_mark:   |
+| GetCustomer         | :x:                  |
+| SetCustomer         | :x:                  |
+| CheckCustomer       | :question:           |
+| GetScriptTag        | :x:                  |
+| SetScriptTag        | :x:                  |
+| GetPage             | :x:                  |
+| SetPage             | :x:                  |
+| GetPageContent      | :x:                  |
+| SetPageContent      | :x:                  |
+| GetStorage          | :x:                  |
+| SetStorage          | :x:                  |
+| GetProductParameter | :x:                  |
+| SetProductParameter | :x:                  |
+| GetAutomatism       | :x:                  |
+| SetAutomatism       | :x:                  |

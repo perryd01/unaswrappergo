@@ -19,13 +19,15 @@ const (
 )
 
 type GetStorageParams struct {
-	Type    getStorageType    `xml:"Params>Type,omitempty"`
-	GetInfo getStorageGetInfo `xml:"Params>GetInfo,omitempty"`
-	Folder  string            `xml:"Params>Folder,omitempty"`
+	XMLName xml.Name          `xml:"Params"`
+	Type    getStorageType    `xml:"Type,omitempty"`
+	GetInfo getStorageGetInfo `xml:"GetInfo,omitempty"`
+	Folder  string            `xml:"Folder,omitempty"`
 }
 
 type getStorageResponse struct {
-	StorageItems []*StorageItem `xml:"StorageItems"`
+	XMLName     xml.Name       `xml:"StorageItems"`
+	StorageItem []*StorageItem `xml:"StorageItem"`
 }
 
 type StorageItem struct {
@@ -55,7 +57,7 @@ func (uo *UnasObject) GetStorage(params *GetStorageParams) ([]*StorageItem, erro
 		return nil, err
 	}
 
-	return gStorageResponse.StorageItems, nil
+	return gStorageResponse.StorageItem, nil
 }
 
 type setStorageItemAction string
@@ -68,8 +70,8 @@ const (
 )
 
 type setStorageItemRequest struct {
-	XMLName     xml.Name         `xml:"StorageItems"`
-	StorageItem []SetStorageItem `xml:"StorageItem"`
+	XMLName     xml.Name          `xml:"StorageItems"`
+	StorageItem []*SetStorageItem `xml:"StorageItem"`
 }
 
 type SetStorageItem struct {
@@ -80,8 +82,8 @@ type SetStorageItem struct {
 }
 
 type setStorageResponse struct {
-	XMLName     xml.Name                 `xml:"StorageItems"`
-	StorageItem []SetStorageResponseItem `xml:"StorageItem"`
+	XMLName     xml.Name                  `xml:"StorageItems"`
+	StorageItem []*SetStorageResponseItem `xml:"StorageItem"`
 }
 
 type SetStorageResponseItem struct {
@@ -90,8 +92,10 @@ type SetStorageResponseItem struct {
 }
 
 //SetStorage https://unas.hu/tudastar/api/storage#setstorage-funkcio
-func (uo *UnasObject) SetStorage(items []SetStorageItem) ([]SetStorageResponseItem, error) {
-	b, err := xml.Marshal(setStorageItemRequest{StorageItem: items})
+func (uo *UnasObject) SetStorage(items []*SetStorageItem) ([]*SetStorageResponseItem, error) {
+	b, err := xml.Marshal(setStorageItemRequest{
+		StorageItem: items,
+	})
 	if err != nil {
 		return nil, err
 	}

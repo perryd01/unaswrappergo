@@ -46,7 +46,7 @@ func (uo *UnasObject) makeRequest(endpoint endpointEnumType, body []byte) ([]byt
 	}(resp.Body)
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, errors.New("status not 200 on " + string(endpoint))
+		return nil, errors.New(resp.Status + " on " + string(endpoint))
 	}
 
 	returnable, _ := ioutil.ReadAll(resp.Body)

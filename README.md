@@ -47,8 +47,8 @@ Unas API has an often poor, so we can't figure out some minor stuff either :conf
 | SetPage             | :x:                  |
 | GetPageContent      | :x:                  |
 | SetPageContent      | :x:                  |
-| GetStorage          | :x:                  |
-| SetStorage          | :x:                  |
+| GetStorage          | :heavy_check_mark:   |
+| SetStorage          | :heavy_check_mark:   |
 | GetProductParameter | :x:                  |
 | SetProductParameter | :x:                  |
 | GetAutomatism       | :x:                  |

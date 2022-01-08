@@ -5,9 +5,8 @@ import (
 	"testing"
 )
 
-var apiKey = os.Getenv("apiKey")
-
 func TestAuthwithAPIKey(t *testing.T) {
+	var apiKey = os.Getenv("apiKey")
 	uo, err := AuthwithAPIKey(apiKey)
 	if err != nil {
 		t.Error(err)

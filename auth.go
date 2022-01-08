@@ -40,6 +40,11 @@ type Auth struct {
 // AuthwithAPIKey Authenticating using an API key.
 // https://unas.hu/tudastar/api/authorization#api-kulcs-alapu-azonositas
 func AuthwithAPIKey(apikey string) (*UnasObject, error) {
+
+	if apikey == "" {
+		return nil, errors.New("empty apiKey")
+	}
+
 	payload := loginAPIParams{
 		APIKey:  apikey,
 		XMLName: xml.Name{Local: "Params"},
@@ -84,6 +89,10 @@ func AuthwithAPIKey(apikey string) (*UnasObject, error) {
 
 	uo := UnasObject{
 		Login: xmlresponse,
+	}
+
+	if uo.Login.Status != "ok" {
+		return nil, errors.New("auth status not OK")
 	}
 
 	return &uo, nil

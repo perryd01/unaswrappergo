@@ -14,7 +14,7 @@ type getProductRequestResponse struct {
 
 type GetProductRequestParams struct {
 	XMLName      xml.Name         `xml:"Params"`
-	StatusBase   *statusBaseEnum  `xml:"StatusBase,omitempty"`   // termék alap státusza; 0 – nem aktív; 1 – aktív; 2 – aktív, új; 3 – aktív, nem vásárolható;
+	StatusBase   statusBaseEnum   `xml:"StatusBase,omitempty"`   // termék alap státusza; 0 – nem aktív; 1 – aktív; 2 – aktív, új; 3 – aktív, nem vásárolható;
 	ID           string           `xml:"Id,omitempty"`           // termék egyedi azonosítója, ha ezt megadtad, akkor az Sku értéket figyelmen kívül hagyjuk
 	Sku          string           `xml:"Sku,omitempty"`          // termék cikkszáma
 	Parent       string           `xml:"Parent,omitempty"`       // típus összevonás esetén ezen alap típushoz tartozó termékek listázása

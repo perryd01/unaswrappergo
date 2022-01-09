@@ -20,7 +20,7 @@ Big thanks to [@ondrejoa](https://github.com/ondrejoa) for helping me in this.
 | AuthwithPass        | not gonna support it |
 | GetNewsletter       | :question:           |
 | SetNewsletter       | :question:           |
-| GetProduct          | :x:                  |
+| GetProduct          | :heavy_check_mark:   |
 | SetProduct          | :x:                  |
 | GetProductDB        | :x:                  |
 | SetProductDB        | :x:                  |
